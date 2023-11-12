@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   // ...
+  console.log("A user connected", socket.id);
 });
 
 httpServer.listen(3000);
