@@ -1,7 +1,7 @@
 import express, { app } from "./lib/express.ts";
 import { Talk } from "./lib/AI.ts";
 import userRoutes from "./routes/userRoutes.ts";
-import { io } from "./lib/io.ts";
+import { io, httpServer } from "./lib/io.ts";
 
 app.use(express.json());
 
