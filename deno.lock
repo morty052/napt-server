@@ -2,6 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "npm:cors@^2.8.5": "npm:cors@2.8.5",
       "npm:express": "npm:express@4.18.2",
       "npm:express@^4.17": "npm:express@4.18.2",
       "npm:http": "npm:http@0.0.1-security",

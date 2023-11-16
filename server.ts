@@ -1,11 +1,19 @@
 import express, { app } from "./lib/express.ts";
 import { Talk } from "./lib/AI.ts";
-import userRoutes from "./routes/userRoutes.ts";
+import { userRoutes, aiRoutes } from "./routes/index.ts";
 import { io, httpServer } from "./lib/io.ts";
+import cors from "npm:cors@^2.8.5";
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use(express.json());
 
 app.use("/users", userRoutes);
+app.use("/ai", aiRoutes);
 
 const userSpace = io.of("/user");
 
