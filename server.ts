@@ -1,19 +1,11 @@
-import express from "./lib/express.ts";
-import { createServer } from "node:http";
-import { Server } from "npm:socket.io";
+import express, { app } from "./lib/express.ts";
 import { Talk } from "./lib/AI.ts";
 import userRoutes from "./routes/userRoutes.ts";
-
-const app = express();
-const httpServer = createServer(app);
+import { io } from "./lib/io.ts";
 
 app.use(express.json());
 
 app.use("/users", userRoutes);
-
-const io = new Server(httpServer, {
-  /* options */
-});
 
 const userSpace = io.of("/user");
 
@@ -25,6 +17,12 @@ userSpace.on("connection", (socket) => {
     const { message } = data;
     console.log("handshake received from", socket.id);
     cb(`returning ${message} from server`);
+  });
+
+  socket.on("SET_TURN", (data, cb) => {
+    const { turn } = data;
+    console.log("turn request from", socket.id);
+    cb(turn);
   });
 
   socket.on("disconnect", () => {
