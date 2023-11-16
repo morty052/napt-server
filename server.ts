@@ -1,21 +1,30 @@
-import express from "npm:express";
+import express from "./lib/express.ts";
 import { createServer } from "node:http";
 import { Server } from "npm:socket.io";
+import { Talk } from "./lib/AI.ts";
+import userRoutes from "./routes/userRoutes.ts";
 
 const app = express();
 const httpServer = createServer(app);
+
+app.use(express.json());
+
+app.use("/users", userRoutes);
+
 const io = new Server(httpServer, {
   /* options */
 });
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   console.log("request received");
   res.send("Hello World!");
+  const joke = await Talk();
+  console.log(joke);
 });
 
 io.on("connection", (socket) => {
   // ...
-  console.log("A user connected", socket.id);
+  console.log("connected", socket.id);
 });
 
 httpServer.listen(3000);
