@@ -22,8 +22,9 @@ userSpace.on("connection", (socket) => {
   console.log("connected", socket.id);
 
   socket.on("handshake", (data) => {
-    const { _id } = data;
-    socket.join(`user_${_id}`);
+    const { username } = data;
+    socket.join(`user_${username}`);
+    console.log(`user ${username} joined`);
   });
 
   socket.on("SET_TURN", (data, cb) => {
