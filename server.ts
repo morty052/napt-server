@@ -21,13 +21,13 @@ userSpace.on("connection", (socket) => {
   // ...
   console.log("connected", socket.id);
 
-  userSpace.on("handshake", (data, cb) => {
+  socket.on("handshake", (data, cb) => {
     const { message } = data;
     console.log("handshake received from", socket.id);
     cb(`returning ${message} from server`);
   });
 
-  userSpace.on("disconnect", () => {
+  socket.on("disconnect", () => {
     console.log("disconnected", socket.id);
   });
 });
