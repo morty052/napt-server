@@ -15,6 +15,17 @@ const io = new Server(httpServer, {
   /* options */
 });
 
+const userSpace = io.of("/user");
+
+userSpace.on("connection", (socket) => {
+  // ...
+  console.log("connected", socket.id);
+
+  userSpace.on("disconnect", () => {
+    console.log("disconnected", socket.id);
+  });
+});
+
 app.get("/", async (req, res) => {
   console.log("request received");
   res.send("Hello World!");
