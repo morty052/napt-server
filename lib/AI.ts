@@ -31,7 +31,7 @@ async function confirmAnimal(animal: string) {
       {
         role: "system",
         content:
-          "You are a helpful assistant designed to output JSON with two fields one to check if the animal is real with simple output of yes or no and another to describe it if its real.",
+          "You are a helpful assistant designed to output JSON with two fields 'isRealAnimal', 'description' 'isRealAnimal' is a boolean and 'description' is a string with a description of the animal.",
       },
       { role: "user", content: animalTocheck },
     ],
