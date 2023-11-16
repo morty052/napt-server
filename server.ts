@@ -30,7 +30,10 @@ userSpace.on("connection", (socket) => {
   socket.on("SET_TURN", (data, cb) => {
     const { turn } = data;
     console.log("turn request from", socket.id);
-    cb(turn);
+    cb("returning turn from server", turn);
+    socket.emit("SWITCH_TURN", {
+      turn: turn + 1,
+    });
   });
 
   socket.on("disconnect", () => {
