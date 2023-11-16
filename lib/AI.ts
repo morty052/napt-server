@@ -1,7 +1,8 @@
 import OpenAI from "npm:openai";
+import { load } from "https://deno.land/std@0.206.0/dotenv/mod.ts";
 
-const OPENAI_API_KEY =
-  Deno.env.get("DEV_KEY") ?? Deno.env.get("OPENAI_API_KEY");
+const env = await load();
+const OPENAI_API_KEY = env["OPENAI_API_KEY"];
 
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
