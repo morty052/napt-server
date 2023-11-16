@@ -36,6 +36,14 @@ userSpace.on("connection", (socket) => {
     });
   });
 
+  socket.on("SET_LETTER", (data, cb) => {
+    const { letter } = data;
+    cb("returning letter from server", letter);
+    socket.emit("SWITCH_LETTER", {
+      letter: letter,
+    });
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected", socket.id);
   });
