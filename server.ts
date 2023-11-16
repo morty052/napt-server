@@ -21,6 +21,10 @@ userSpace.on("connection", (socket) => {
   // ...
   console.log("connected", socket.id);
 
+  userSpace.on("handshake", () => {
+    console.log("handshake received from", socket.id);
+  });
+
   userSpace.on("disconnect", () => {
     console.log("disconnected", socket.id);
   });
