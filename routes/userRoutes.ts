@@ -8,17 +8,19 @@ userRoutes.get("/", (req, res) => {
 });
 
 userRoutes.get("/createuser", async (req, res) => {
-  const { email, password } = req.query;
+  const { email, password, username } = req.query;
   const doc = {
     _type: "users",
     email,
     password,
+    username,
   };
 
   const { _id } = await client.create(doc).then((res) => res);
 
   res.send({
     _id,
+    username,
   });
 });
 
