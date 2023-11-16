@@ -1,8 +1,7 @@
 import OpenAI from "npm:openai";
 
 const OPENAI_API_KEY =
-  Deno.env.get("OPENAI_API_KEY") ??
-  "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";
+  Deno.env.get("DEV_KEY") ?? Deno.env.get("OPENAI_API_KEY");
 
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
