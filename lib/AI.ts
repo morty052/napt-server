@@ -1,11 +1,11 @@
 import OpenAI from "npm:openai";
-Deno.env.set(
-  "OPENAI_API_KEY",
-  "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"
-);
+
+const OPENAI_API_KEY =
+  Deno.env.get("OPENAI_API_KEY") ??
+  "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";
 
 const openai = new OpenAI({
-  apiKey: Deno.env.get("OPENAI_API_KEY"),
+  apiKey: OPENAI_API_KEY,
 });
 
 async function Talk() {

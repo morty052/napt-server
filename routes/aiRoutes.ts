@@ -11,7 +11,7 @@ aiRoutes.get("/", async (req, res) => {
 aiRoutes.get("/checkanimal", async (req, res) => {
   const animal = req.query.animal;
   const check = await confirmAnimal(animal as string);
-  res.send({ check: check });
+  res.send(check);
 });
 
 export default aiRoutes;
