@@ -1,5 +1,5 @@
 import express from "../lib/express.ts";
-import { client } from "../lib/sanityclient.ts";
+import { client, getUser } from "../lib/sanityclient.ts";
 
 const userRoutes = express.Router();
 
@@ -21,6 +21,16 @@ userRoutes.get("/createuser", async (req, res) => {
   res.send({
     _id,
     username,
+  });
+});
+
+userRoutes.get("/getuser", async (req, res) => {
+  const { username } = req.query;
+
+  const user = await getUser(username as string);
+
+  res.send({
+    user,
   });
 });
 
