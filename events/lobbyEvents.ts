@@ -192,7 +192,7 @@ export function LobbyEvents(socket, userNamespace) {
   });
 
   socket.on("FIND_MATCH", async (data, cb) => {
-    const { username, room_id: _id } = data;
+    const { username } = data;
     console.log(username, "is looking for a match");
 
     //  *   GET PLAYERS LOOKING FOR MATCH
@@ -226,83 +226,6 @@ export function LobbyEvents(socket, userNamespace) {
     });
 
     return;
-
-    //    * RESTRUCTURE PLAYERS
-    const challengers = couple.map((player) => ({
-      controller: {
-        _type: "reference",
-        _ref: `${player._id}`,
-      },
-      points: 0,
-      status: {
-        alive: true,
-      },
-      statuseffects: {
-        none: true,
-      },
-    }));
-
-    const category = "General_knowledge";
-
-    //    * GET RANDOM START AND END OF QUESTIONS ON CMS
-    const { start, end } = generateQuestionsIndex();
-
-    //   *  CREATE ROOM OBJECT
-    const room = {
-      _type: "rooms",
-      room_id: "PUBLIC_ROOM",
-      category: category,
-      range: {
-        start: start,
-        end: end,
-      },
-      players: [...challengers],
-    };
-
-    //     CREATE ROOM ON CMS
-    const room_id = await client
-      .create(room, { autoGenerateArrayKeys: true })
-      .then((res) => res._id);
-
-    //     ADD PLAYER SOCKETS TO CREATED ROOM
-    socket.join(room_id);
-
-    //     SEND BACK TO ROOM
-
-    cb({
-      message: "MATCH_FOUND",
-      match: match.username,
-      room_id,
-      seeker_id: player[0]._id,
-      match_id: match._id,
-      category,
-    });
-
-    console.log("concluded matchmaking algorithm");
-
-    return;
-
-    //     const matchseekerQuery = `*[_type == "users" && _id == "${_id}"]`;
-    //     const seeker = await client.fetch(matchseekerQuery).then((res) => res[0]);
-    //     const { _id: seeker_id } = seeker;
-
-    //     const { _id: match_id } = match;
-
-    //     await client.patch(seeker_id).set({ matchmaking: false }).commit();
-
-    //     await client.patch(match_id).set({ matchmaking: false }).commit();
-
-    // cb({
-    //   seeker_id,
-    //   match_id,
-    //   room_id,
-    //   category,
-    //   match: match.username,
-    // });
-
-    // userNamespace
-    //   .to(`user_${username}`)
-    //   .emit("FRIEND_REQUEST_RECEIVED", { username});
   });
 
   socket.on("ACCEPT_MATCH", async (data, cb) => {
@@ -447,7 +370,7 @@ export function LobbyEvents(socket, userNamespace) {
 
   socket.on("MATCH_MAKING", async (data, cb) => {
     const { username, room_id: _id } = data;
-    console.log(username, "is looking for a match");
+    console.log(username, "is trying to matchmake");
 
     const seeker = await getUser(username);
     const { _id: seeker_id } = seeker;
