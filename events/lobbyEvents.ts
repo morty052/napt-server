@@ -245,11 +245,9 @@ export function LobbyEvents(socket, userNamespace) {
     const roomQuery = `*[_type == "rooms" && references(["${seeker_id}","${match_id}"])]{_id, range, players[]{...,controller -> {..., character -> {...}}}}`;
     const room = await client.fetch(roomQuery).then((res) => res[0]);
 
-    const category = "General_knowledge";
-
     if (!room) {
       console.log("room not found, safe to create");
-      const { start, end } = generateQuestionsIndex();
+      // const { start, end } = generateQuestionsIndex();
 
       const userQuery = `*[_type == "users" && username == "${username}"]`;
       const user_id = await client.fetch(userQuery).then((res) => res[0]._id);
@@ -274,11 +272,6 @@ export function LobbyEvents(socket, userNamespace) {
       const room = {
         _type: "rooms",
         room_id: "PUBLIC_ROOM",
-        category: category,
-        range: {
-          start: start,
-          end: end,
-        },
         players: [...challenger],
       };
 
