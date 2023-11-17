@@ -59,9 +59,4 @@ app.get("/", async (req, res) => {
   console.log(joke);
 });
 
-io.on("connection", (socket) => {
-  // ...
-  console.log("connected", socket.id);
-});
-
 httpServer.listen(3000);

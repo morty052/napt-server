@@ -5,5 +5,7 @@ import { app } from "./express.ts";
 export const httpServer = createServer(app);
 
 export const io = new Server(httpServer, {
-  /* options */
+  cors: {
+    origin: "*",
+  },
 });
