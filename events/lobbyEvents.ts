@@ -332,11 +332,12 @@ export function LobbyEvents(socket, userNamespace) {
         .patch(_id)
         .setIfMissing({ players: [] })
         .insert("after", "players[-1]", [newplayer])
-        .commit({ autoGenerateArrayKeys: true });
+        .commit({ autoGenerateArrayKeys: true })
+        .then((res) => res._id);
 
-      socket.join(_id);
+      socket.join(room_id);
 
-      userNamespace.in(_id).emit("JOINED_PUBLIC_ROOM", {
+      userNamespace.in(room_id).emit("JOINED_PUBLIC_ROOM", {
         message: `you ${username} created room ${room_id}`,
         status: "JOINED",
         seeker_id,
