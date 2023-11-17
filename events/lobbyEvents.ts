@@ -338,11 +338,11 @@ export function LobbyEvents(socket, userNamespace) {
       socket.join(room_id);
 
       userNamespace.in(room_id).emit("JOINED_PUBLIC_ROOM", {
-        message: `you ${username} created room ${room_id}`,
+        message: `you ${username} joined room ${room_id}`,
         status: "JOINED",
         seeker_id,
         match_id,
-        room_id: _id,
+        room_id,
       });
     }
   });
