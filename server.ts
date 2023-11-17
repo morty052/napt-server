@@ -3,6 +3,7 @@ import { Talk } from "./lib/AI.ts";
 import { userRoutes, aiRoutes } from "./routes/index.ts";
 import { io, httpServer } from "./lib/io.ts";
 import cors from "npm:cors@^2.8.5";
+import { LobbyEvents } from "./events/lobbyEvents.ts";
 
 app.use(
   cors({
@@ -43,6 +44,8 @@ userSpace.on("connection", (socket) => {
       letter: letter,
     });
   });
+
+  LobbyEvents(socket, userSpace);
 
   socket.on("disconnect", () => {
     console.log("disconnected", socket.id);
