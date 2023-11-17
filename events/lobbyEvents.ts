@@ -260,12 +260,10 @@ export function LobbyEvents(socket, userNamespace) {
           },
           points: 0,
           status: {
-            alive: true,
+            connected: true,
+            ready: true,
           },
-          statuseffects: {
-            none: true,
-          },
-          ready: true,
+          turn_id: 0,
         },
       ];
 
@@ -324,12 +322,10 @@ export function LobbyEvents(socket, userNamespace) {
         },
         points: 0,
         status: {
-          alive: true,
+          connected: true,
+          ready: true,
         },
-        statuseffects: {
-          none: true,
-        },
-        ready: true,
+        turn_id: 1,
       };
 
       const room_id = await client
