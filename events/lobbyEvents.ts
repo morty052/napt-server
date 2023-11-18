@@ -343,6 +343,7 @@ export function LobbyEvents(socket, userNamespace) {
         seeker_id,
         match_id,
         room_id,
+        maxTurns: players.length,
       });
     }
   });

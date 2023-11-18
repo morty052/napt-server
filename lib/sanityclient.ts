@@ -38,3 +38,11 @@ export async function getUserPoints(username: string) {
     highscore,
   };
 }
+
+export async function getRoom(_id: string) {
+  const query = `*[_type == "rooms" && _id == "${_id}"]{..., players[]{..., controller -> {..., character -> {...}}}}`;
+  const data = await client.fetch(query);
+  const room = data[0];
+
+  return room;
+}

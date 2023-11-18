@@ -1,5 +1,5 @@
 import express from "../lib/express.ts";
-import { client, getUser } from "../lib/sanityclient.ts";
+import { client, getUser, getRoom } from "../lib/sanityclient.ts";
 
 const userRoutes = express.Router();
 
@@ -14,6 +14,8 @@ userRoutes.get("/createuser", async (req, res) => {
     email,
     password,
     username,
+    points: 0,
+    highscore: 0,
   };
 
   const { _id } = await client.create(doc).then((res) => res);
@@ -31,6 +33,15 @@ userRoutes.get("/getuser", async (req, res) => {
 
   res.send({
     user,
+  });
+});
+
+userRoutes.get("/getroom", async (req, res) => {
+  const { room_id } = req.query;
+  const room = await getRoom(room_id as string);
+
+  res.send({
+    room,
   });
 });
 

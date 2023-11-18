@@ -1,5 +1,11 @@
-import OpenAI from "npm:openai";
+import OpenAI, { toFile } from "npm:openai";
 import { load } from "https://deno.land/std@0.206.0/dotenv/mod.ts";
+import path from "npm:path";
+import fs from "node:fs";
+
+export const toFileMap = toFile;
+
+const filepath = path.join("../uploads/test.mp3");
 
 const env = await load();
 const OPENAI_API_KEY = env["OPENAI_API_KEY"];
@@ -15,6 +21,20 @@ async function Talk() {
   });
   const joke = completion.choices[0].message.content;
   return joke;
+}
+
+export async function SpeechToText() {
+  try {
+    const textResponse = await openai.audio.transcriptions
+      .create({
+        file: fs.createReadStream("../uploads/test.mp3"),
+        model: "whisper-1",
+      })
+      .then((res) => res.text);
+    return textResponse;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function confirmAnimal(animal: string) {
