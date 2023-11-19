@@ -373,38 +373,38 @@ export function LobbyEvents(socket, userNamespace) {
     return;
   });
 
-  socket.on("READY_PLAYER", async (data, cb) => {
-    const { player, room_id } = data;
-    cb("YOU ARE READY");
-    const { _id: currentPlayer_id } = player;
-    const roomQuery = `*[_type == "rooms" && room_id == "${room_id}"]{_id, category, players[]{...,controller -> {..., character -> {name}}}}`;
-    const { players, _id } = await client
-      .fetch(roomQuery)
-      .then((res) => res[0]);
-    const updatedlist = players.map((player) => {
-      if (player.controller._id == currentPlayer_id) {
-        return {
-          controller: { _type: "reference", _ref: `${player.controller._id}` },
-          ready: true,
-        };
-      }
+  // socket.on("READY_PLAYER", async (data, cb) => {
+  //   const { player, room_id } = data;
+  //   cb("YOU ARE READY");
+  //   const { _id: currentPlayer_id } = player;
+  //   const roomQuery = `*[_type == "rooms" && room_id == "${room_id}"]{_id, category, players[]{...,controller -> {..., character -> {name}}}}`;
+  //   const { players, _id } = await client
+  //     .fetch(roomQuery)
+  //     .then((res) => res[0]);
+  //   const updatedlist = players.map((player) => {
+  //     if (player.controller._id == currentPlayer_id) {
+  //       return {
+  //         controller: { _type: "reference", _ref: `${player.controller._id}` },
+  //         ready: true,
+  //       };
+  //     }
 
-      return {
-        controller: { _type: "reference", _ref: `${player.controller._id}` },
-        points: player.points,
-        ready: player.ready,
-      };
-    });
+  //     return {
+  //       controller: { _type: "reference", _ref: `${player.controller._id}` },
+  //       points: player.points,
+  //       ready: player.ready,
+  //     };
+  //   });
 
-    await client
-      .patch(_id)
-      .setIfMissing({ players: [] })
-      .set({ players: updatedlist })
-      .commit({ autoGenerateArrayKeys: true })
-      .then((res) => console.table(res));
-    console.table([players, _id]);
-    userNamespace.to(`${room_id}`).emit("PLAYER_READY", "PLAYER IS READY");
-  });
+  //   await client
+  //     .patch(_id)
+  //     .setIfMissing({ players: [] })
+  //     .set({ players: updatedlist })
+  //     .commit({ autoGenerateArrayKeys: true })
+  //     .then((res) => console.table(res));
+  //   console.table([players, _id]);
+  //   userNamespace.to(`${room_id}`).emit("PLAYER_READY", "PLAYER IS READY");
+  // });
 
   //   socket.on("CREATE_ROOM", async (data, cb) => {
   //     // * DESCTRUCTURE HOST USERNAME AND CATEGORY FROM DATA
