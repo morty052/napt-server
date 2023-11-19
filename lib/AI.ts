@@ -39,7 +39,7 @@ export async function SpeechToText() {
 
 async function confirmAnimal(animal: string) {
   const animalQuestion = () => {
-    return ` is this this a real animal? ${animal}`;
+    return ` is  this a real animal? insect? mammal? bird? fish? or biological entity? ${animal}`;
   };
 
   const animalTocheck = animalQuestion();
@@ -51,7 +51,7 @@ async function confirmAnimal(animal: string) {
       {
         role: "system",
         content:
-          "You are a helpful assistant designed to output JSON with two fields 'isRealAnimal', 'description' 'isRealAnimal' is a boolean and 'description' is a string with a description of the animal.",
+          "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isRealAnimal' is a boolean and 'description' is a string with a description of the animal.",
       },
       { role: "user", content: animalTocheck },
     ],
@@ -60,4 +60,73 @@ async function confirmAnimal(animal: string) {
   return confirmation;
 }
 
-export { openai, Talk, confirmAnimal };
+async function confirmPlace(place: string) {
+  const placeQuestion = () => {
+    return ` is this a real state? city? or street? ${place}`;
+  };
+
+  const placeTocheck = placeQuestion();
+
+  const completion = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo-1106",
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the place.",
+      },
+      { role: "user", content: placeTocheck },
+    ],
+  });
+  const confirmation = completion.choices[0].message.content;
+  return confirmation;
+}
+
+async function confirmThing(place: string) {
+  const thingQuestion = () => {
+    return ` is this a real thing? thing as in  inanimate object only objects allowed, places names and animals not allowed? ${place}`;
+  };
+
+  const thingTocheck = thingQuestion();
+
+  const completion = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo-1106",
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the thing.",
+      },
+      { role: "user", content: thingTocheck },
+    ],
+  });
+  const confirmation = completion.choices[0].message.content;
+  return confirmation;
+}
+
+async function confirmName(place: string) {
+  const nameQuestion = () => {
+    return ` is this a real name of a person? ${place}`;
+  };
+
+  const nameTocheck = nameQuestion();
+
+  const completion = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo-1106",
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the name.",
+      },
+      { role: "user", content: nameTocheck },
+    ],
+  });
+  const confirmation = completion.choices[0].message.content;
+  return confirmation;
+}
+
+export { openai, Talk, confirmAnimal, confirmPlace, confirmThing, confirmName };

@@ -1,11 +1,14 @@
 import express from "../lib/express.ts";
-import { SpeechToText, Talk, confirmAnimal, toFileMap } from "../lib/AI.ts";
+import {
+  Talk,
+  confirmAnimal,
+  confirmName,
+  confirmPlace,
+  confirmThing,
+} from "../lib/AI.ts";
 // @deno-types="npm:@types/multer"
 import multer from "npm:multer";
 import { Readable } from "node:stream";
-import fs from "node:fs";
-import { toFile } from "npm:openai";
-import { fileFromPath } from "npm:openai";
 
 const aiRoutes = express.Router();
 
@@ -33,9 +36,27 @@ aiRoutes.get("/", async (req, res) => {
   res.send("the joke" + joke);
 });
 
+aiRoutes.get("/checkname", async (req, res) => {
+  const name = req.query.name;
+  const check = await confirmName(name as string);
+  res.send(check);
+});
+
 aiRoutes.get("/checkanimal", async (req, res) => {
   const animal = req.query.animal;
   const check = await confirmAnimal(animal as string);
+  res.send(check);
+});
+
+aiRoutes.get("/checkplace", async (req, res) => {
+  const place = req.query.place;
+  const check = await confirmPlace(place as string);
+  res.send(check);
+});
+
+aiRoutes.get("/checkthing", async (req, res) => {
+  const thing = req.query.thing;
+  const check = await confirmThing(thing as string);
   res.send(check);
 });
 
