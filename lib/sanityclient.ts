@@ -144,3 +144,65 @@ export async function CheckReadyPlayers(room_id: string) {
     console.error(error);
   }
 }
+
+export async function updatePlayerChoice(
+  room_id: string,
+  username: string,
+  choices: any
+) {
+  try {
+    // if (username == "abel") {
+    //   return;
+    // }
+
+    const room = await getRoom(room_id);
+
+    if (!room) {
+      throw "room not found";
+    }
+    const { players } = room;
+
+    const playerToUpdate = players.filter(
+      (player: any) => player.controller.username == username
+    );
+
+    const updatedList = players.map((player: any) => {
+      if (player.controller.username == username) {
+        return {
+          ...player,
+          controller: {
+            _type: "reference",
+            _ref: player.controller._id,
+          },
+          choices,
+        };
+      }
+
+      return {
+        ...player,
+        controller: {
+          _type: "reference",
+          _ref: player.controller._id,
+        },
+      };
+    });
+
+    // await client
+    //   .patch(room_id)
+    //   .set({ "players[username == 'abel'].choices": choices })
+    //   .commit({ autoGenerateArrayKeys: true });
+
+    const playerQuery = `players[username == "${username}"].choices`;
+
+    await client
+      .patch(room_id)
+      .set({
+        [`players[username == "${username}"].choices`]: choices,
+      })
+      .commit({ autoGenerateArrayKeys: true });
+
+    console.log("updated player choices>", username, choices);
+  } catch (error) {
+    console.error(error);
+  }
+}

@@ -1,7 +1,17 @@
 import { Socket, Namespace } from "npm:socket.io";
-import { CheckReadyPlayers, readyPlayer } from "../lib/sanityclient.ts";
+import {
+  CheckReadyPlayers,
+  readyPlayer,
+  updatePlayerChoice,
+} from "../lib/sanityclient.ts";
 
 export function matchEvents(socket: Socket, userSpace: Namespace) {
+  socket.on("PING_ROOM", (data) => {
+    const { room_id } = data;
+    socket.join(room_id);
+    console.log("someone joined room", room_id);
+  });
+
   socket.on("SET_TURN", (data, cb) => {
     const { turn, room_id } = data;
     console.log("turn request from", socket.id);
@@ -19,10 +29,23 @@ export function matchEvents(socket: Socket, userSpace: Namespace) {
     });
   });
 
-  socket.on("END_ROUND", (data) => {
-    const { room_id, currentTurn, maxTurns, answers } = data;
+  socket.on("END_ROUND", async (data, cb) => {
+    const { room_id, currentTurn, maxTurns, players, player } = data;
 
-    console.info("max turns for this match is", maxTurns);
+    console.info("player", player.username, "choices", player.choices);
+
+    await updatePlayerChoice(room_id, player.username, player.choices);
+
+    cb("returning message from server");
+
+    // userSpace.to(room_id).emit("ROUND_ENDED", {
+    //   message: "round ended",
+    //   turn: currentTurn + 1 > maxTurns ? 1 : currentTurn + 1,
+    // });
+  });
+
+  socket.on("TALLY_ROUND", (data) => {
+    const { room_id, currentTurn, maxTurns } = data;
 
     userSpace.to(room_id).emit("ROUND_ENDED", {
       message: "round ended",
