@@ -30,14 +30,18 @@ export function matchEvents(socket: Socket, userSpace: Namespace) {
     });
   });
 
-  socket.on("END_ROUND", async (data) => {
+  socket.on("END_ROUND", async (data, cb) => {
     const { room_id, currentTurn, maxTurns, players, player } = data;
 
     console.info("player", player.username, "choices", player.choices);
 
     await updatePlayerChoice(room_id, player.username, player.choices);
 
-    userSpace.to(room_id).emit("ROUND_ENDED", {
+    // userSpace.to(room_id).emit("ROUND_ENDED", {
+    //   message: "round ended",
+    //   turn: currentTurn + 1 > maxTurns ? 1 : currentTurn + 1,
+    // });
+    cb({
       message: "round ended",
       turn: currentTurn + 1 > maxTurns ? 1 : currentTurn + 1,
     });
