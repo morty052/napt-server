@@ -3,6 +3,7 @@ import {
   CheckReadyPlayers,
   readyPlayer,
   updatePlayerChoice,
+  getTally,
 } from "../lib/sanityclient.ts";
 
 export function matchEvents(socket: Socket, userSpace: Namespace) {
@@ -29,27 +30,38 @@ export function matchEvents(socket: Socket, userSpace: Namespace) {
     });
   });
 
-  socket.on("END_ROUND", async (data, cb) => {
+  socket.on("END_ROUND", async (data) => {
     const { room_id, currentTurn, maxTurns, players, player } = data;
 
     console.info("player", player.username, "choices", player.choices);
 
     await updatePlayerChoice(room_id, player.username, player.choices);
 
-    cb("returning message from server");
-
-    // userSpace.to(room_id).emit("ROUND_ENDED", {
-    //   message: "round ended",
-    //   turn: currentTurn + 1 > maxTurns ? 1 : currentTurn + 1,
-    // });
-  });
-
-  socket.on("TALLY_ROUND", (data) => {
-    const { room_id, currentTurn, maxTurns } = data;
-
     userSpace.to(room_id).emit("ROUND_ENDED", {
       message: "round ended",
       turn: currentTurn + 1 > maxTurns ? 1 : currentTurn + 1,
+    });
+  });
+
+  socket.on("GET_TALLY", async (data, cb) => {
+    const { room_id } = data;
+
+    const playerTally = await getTally(room_id);
+
+    cb({
+      playerTally,
+    });
+  });
+
+  socket.on("BUSTED_PLAYER", async (data) => {
+    const { room_id, username, updatedTally, labelToChange } = data;
+    console.table([username, room_id]);
+
+    userSpace.to(room_id).emit("BUSTED_PLAYER", {
+      message: "round ended",
+      updatedTally,
+      username,
+      labelToChange,
     });
   });
 

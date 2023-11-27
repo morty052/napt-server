@@ -44,20 +44,24 @@ async function confirmAnimal(animal: string) {
 
   const animalTocheck = animalQuestion();
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-1106",
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the animal.",
-      },
-      { role: "user", content: animalTocheck },
-    ],
-  });
-  const confirmation = completion.choices[0].message.content;
-  return confirmation;
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-1106",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the animal.",
+        },
+        { role: "user", content: animalTocheck },
+      ],
+    });
+    const confirmation = completion.choices[0].message.content;
+    return confirmation;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function confirmPlace(place: string) {
@@ -67,20 +71,24 @@ async function confirmPlace(place: string) {
 
   const placeTocheck = placeQuestion();
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-1106",
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the place.",
-      },
-      { role: "user", content: placeTocheck },
-    ],
-  });
-  const confirmation = completion.choices[0].message.content;
-  return confirmation;
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-1106",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the place.",
+        },
+        { role: "user", content: placeTocheck },
+      ],
+    });
+    const confirmation = completion.choices[0].message.content;
+    return confirmation;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function confirmThing(place: string) {
@@ -90,20 +98,24 @@ async function confirmThing(place: string) {
 
   const thingTocheck = thingQuestion();
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-1106",
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the thing.",
-      },
-      { role: "user", content: thingTocheck },
-    ],
-  });
-  const confirmation = completion.choices[0].message.content;
-  return confirmation;
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-1106",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the thing.",
+        },
+        { role: "user", content: thingTocheck },
+      ],
+    });
+    const confirmation = completion.choices[0].message.content;
+    return confirmation;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function confirmName(place: string) {
@@ -113,20 +125,24 @@ async function confirmName(place: string) {
 
   const nameTocheck = nameQuestion();
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-1106",
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the name.",
-      },
-      { role: "user", content: nameTocheck },
-    ],
-  });
-  const confirmation = completion.choices[0].message.content;
-  return confirmation;
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-1106",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant designed to output JSON with two fields 'isReal', 'description' 'isReal' is a boolean and 'description' is a string with a description of the name.",
+        },
+        { role: "user", content: nameTocheck },
+      ],
+    });
+    const confirmation = completion.choices[0].message.content;
+    return confirmation;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export { openai, Talk, confirmAnimal, confirmPlace, confirmThing, confirmName };

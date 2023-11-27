@@ -206,3 +206,21 @@ export async function updatePlayerChoice(
     console.error(error);
   }
 }
+
+export async function getTally(room_id: string) {
+  try {
+    const room = await getRoom(room_id);
+    const { players } = room;
+    const playerTally = players.map((player: any) => {
+      return {
+        username: player.username,
+        choices: player.choices,
+        points: player.points,
+      };
+    });
+
+    return playerTally;
+  } catch (error) {
+    console.log(error);
+  }
+}
