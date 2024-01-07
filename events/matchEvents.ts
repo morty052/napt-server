@@ -2,6 +2,7 @@ import { Socket, Namespace } from "npm:socket.io";
 import {
   CheckReadyPlayers,
   readyPlayer,
+  unReadyPlayers,
   updatePlayerChoice,
   getTally,
 } from "../lib/sanityclient.ts";
@@ -31,11 +32,16 @@ export function matchEvents(socket: Socket, userSpace: Namespace) {
   });
 
   socket.on("END_ROUND", async (data, cb) => {
-    const { room_id, currentTurn, maxTurns, players, player } = data;
+    const { room_id, currentTurn, maxTurns, player } = data;
 
-    console.info("player", player.username, "choices", player.choices);
+    console.info("player", player.points);
 
-    await updatePlayerChoice(room_id, player.username, player.choices);
+    await updatePlayerChoice(
+      room_id,
+      player.username,
+      player.choices,
+      player.points
+    );
 
     // userSpace.to(room_id).emit("ROUND_ENDED", {
     //   message: "round ended",
@@ -87,6 +93,7 @@ export function matchEvents(socket: Socket, userSpace: Namespace) {
       return;
     } else if (allPlayersready) {
       console.info("check complete all players are ready do something");
+      await unReadyPlayers(room_id);
       userSpace.to(room_id).emit("ALL_PLAYERS_READY", {
         message: "ALL PLAYERS READY",
         player: username,

@@ -112,6 +112,40 @@ export async function readyPlayer(room_id: string, username: string) {
   }
 }
 
+export async function unReadyPlayers(room_id: string) {
+  try {
+    const room = await getRoom(room_id);
+
+    if (!room) {
+      throw "room not found";
+    }
+
+    const { players } = room;
+
+    const updatedPlayers = players.map((player: any) => {
+      return {
+        ...player,
+        controller: {
+          _type: "reference",
+          _ref: player.controller._id,
+        },
+        status: {
+          ...player.status,
+          ready: false,
+        },
+      };
+    });
+
+    await client
+      .patch(room_id)
+      .setIfMissing({ players: [] })
+      .set({ players: updatedPlayers })
+      .commit({ autoGenerateArrayKeys: true });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 /**
  * Checks if all players in a room are ready.
  *
@@ -148,7 +182,8 @@ export async function CheckReadyPlayers(room_id: string) {
 export async function updatePlayerChoice(
   room_id: string,
   username: string,
-  choices: any
+  choices: any,
+  points: number
 ) {
   try {
     // if (username == "abel") {
@@ -198,6 +233,7 @@ export async function updatePlayerChoice(
       .patch(room_id)
       .set({
         [`players[username == "${username}"].choices`]: choices,
+        [`players[username == "${username}"].points`]: points,
       })
       .commit({ autoGenerateArrayKeys: true });
 
